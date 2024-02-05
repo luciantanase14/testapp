@@ -9,6 +9,7 @@ WORKDIR /app
 
 # Copying the local Go source code into the container
 COPY main.go .
+COPY go.mod .
 
 # Building the Go app which compiles the application for Linux, disables CGO, and statically links all dependencies:
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
