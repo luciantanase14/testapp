@@ -1,7 +1,7 @@
 # Using an Alpine-based Golang image for the building stage:
 FROM golang:alpine AS builder
 
-# Installing git to fetch Go packages
+# Install git, required for fetching Go modules:
 RUN apk update && apk add --no-cache git
 
 # Setting up the working directory inside the container:
@@ -22,6 +22,13 @@ RUN apk --no-cache add ca-certificates
 # Creating a non-root user for running the application securely:
 RUN adduser -D appuser
 
+# Copy the compiled binary from the builder stage to the current stage:
+COPY --from=builder /app/main .
+
+# Copy entrypoint script and make it executable:
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Switch to the non-root user:
 USER appuser
 
@@ -33,6 +40,9 @@ COPY --from=builder /app/main .
 
 # Expose the port the app listens on:
 EXPOSE 80
+
+# Using the entrypoint.sh script as the entry point:
+ENTRYPOINT ["entrypoint.sh"]
 
 # Command to run the executable:
 CMD ["./main"]
