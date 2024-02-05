@@ -11,3 +11,8 @@ Running with a Non-Root User steps:
 Running with a Root User steps:
 1) docker build -t root-testapp .
 2) docker run -d --name test_app_root --user root -p 80:80 root-testapp
+
+
+Extra steps:
+go mod init testapp
+go mod tidy
