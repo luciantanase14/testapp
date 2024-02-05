@@ -16,8 +16,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 # Starting a new stage from scratch for a secure final image:
 FROM alpine:latest
 
-# Add CA certificates in case the app needs and makes HTTPS requests:
-RUN apk --no-cache add ca-certificates
+# Add CA certificates and install openssl for generating secure SALT values:
+RUN apk --no-cache add ca-certificates openssl
 
 # Creating a non-root user for running the application securely:
 RUN adduser -D appuser
