@@ -9,10 +9,10 @@ Run the following commands in the order:
 
 ## Installation
 
-### Running with a Root User steps to work without adjusting main.go application file and it is working fine:
-1) docker build -t testapp .
-2) docker run -d --name my_testapp_root --user root -p 8080:80 testapp
-3) 
 ### If you want to run with a Non-Root User steps it would need an adjustment to Dockerfile and main.go to work:
 1) docker build -t testapp .
 2) docker run -d --name my_testapp -p 8080:80 testapp
+
+### Running with a Root User steps to work without adjusting main.go application file and it is working fine:
+1) docker build -t testapp .
+2) docker run -d --name my_testapp_root --user root -p 8080:80 testapp
