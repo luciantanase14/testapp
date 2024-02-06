@@ -2,17 +2,17 @@
 
 Building a Fortified Docker Image for Golang Applications
 
-## Installation
+## Setup of the Go project before running docker build/run commands
+Run the following commands in the order:
+1) go mod init testapp
+2) go mod tidy
 
-Running with a Non-Root User steps:
+### Installation
+
+# Running with a Non-Root User steps need an adjustment to Dockerfile and main.go to work:
 1) docker build -t testapp .
-2) docker run -d --name test_app -p 80:80 testapp
+2) docker run -d --name my_testapp -p 8080:80 testapp
 
-Running with a Root User steps:
-1) docker build -t root-testapp .
-2) docker run -d --name test_app_root --user root -p 80:80 root-testapp
-
-
-Extra steps:
-go mod init testapp
-go mod tidy
+# Running with a Root User steps to work without adjusting main.go application file:
+1) docker build -t testapp .
+2) docker run -d --name my_testapp_root --user root -p 8080:80 testapp
