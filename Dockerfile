@@ -17,17 +17,20 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 # Starting a new stage from scratch for a secure final image:
 FROM alpine:latest
 
-# Add CA certificates and install openssl for generating secure SALT values:
+# Add CA certificates for secure communication:
 RUN apk --no-cache add ca-certificates openssl
 
 # Creating a non-root user for running the application securely:
 RUN adduser -D appuser
 
 # Copy the compiled binary from the builder stage to the current stage:
-COPY --from=builder /app/main .
+COPY --from=builder /app/main /usr/local/bin/main
 
-# Copy entrypoint script and make it executable:
-COPY entrypoint.sh /usr/local/bin/
+# Set the executable permission for the main binary:
+RUN chmod +x /usr/local/bin/main
+
+# Copy the entrypoint script into the image and give it execute permissions:
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Switch to the non-root user:
@@ -36,14 +39,8 @@ USER appuser
 # Set the working directory in the container:
 WORKDIR /home/appuser
 
-# Copy the compiled binary from the builder stage to the current stage:
-COPY --from=builder /app/main .
-
 # Expose the port the app listens on:
 EXPOSE 80
 
-# Using the entrypoint.sh script as the entry point:
-ENTRYPOINT ["entrypoint.sh"]
-
-# Command to run the executable:
-CMD ["./main"]
+# Using the entrypoint script to start the container, this script will handle SALT generation:
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
