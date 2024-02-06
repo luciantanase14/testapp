@@ -9,7 +9,7 @@ Run the following commands in the order:
 
 ## Installation
 
-### Running with a Non-Root User steps need an adjustment to Dockerfile and main.go to work:
+### Running with a Non-Root User steps needs an adjustment to Dockerfile and main.go to work:
 1) docker build -t testapp .
 2) docker run -d --name my_testapp -p 8080:80 testapp
 
